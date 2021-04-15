@@ -11,7 +11,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/RLogin"
+        app:layout_constraintBottom_toTopOf="@+id/LoginBT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
@@ -24,7 +24,7 @@
             android:text="Password" />
 
         <EditText
-            android:id="@+id/mPassword"
+            android:id="@+id/LoginPassword"
             android:layout_width="205dp"
             android:layout_height="45dp" />
     </LinearLayout>
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/RLogin"
+        app:layout_constraintBottom_toTopOf="@+id/LoginBT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -47,14 +47,14 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/mUsername"
+            android:id="@+id/LoginEmail"
             android:layout_width="205dp"
             android:layout_height="45dp" />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/RLogin"
+        android:id="@+id/LoginBT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="156dp"
@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
-        app:layout_constraintBottom_toTopOf="@+id/RLogin"
+        app:layout_constraintBottom_toTopOf="@+id/LoginBT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.835"
         app:layout_constraintStart_toStartOf="parent"

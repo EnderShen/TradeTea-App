@@ -31,11 +31,18 @@ public class LoginActivity extends AppCompatActivity {
 
         //hide progress bar
         getSupportActionBar().hide();
+        fAuth = FirebaseAuth.getInstance();
 
         mRegister = findViewById(R.id.mRegister);
-        mEmail = findViewById(R.id.REmail);
-        mPassword = findViewById(R.id.RPassword);
-        mLoginBT = findViewById(R.id.RLogin);
+        mEmail = findViewById(R.id.LoginEmail);
+        mPassword = findViewById(R.id.LoginPassword);
+        mLoginBT = findViewById(R.id.LoginBT);
+
+        //if user already logged in, user will not ask for log again
+        if(fAuth.getCurrentUser() != null){
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            finish();
+        }
 
         GotoRegister(mRegister);
         Login(mEmail,mPassword,mLoginBT);
@@ -50,13 +57,12 @@ public class LoginActivity extends AppCompatActivity {
                 String password = mPassword.getText().toString().trim();
 
                 //validate user enter
-                if (TextUtils.isEmpty(password)) {
-                    mPassword.setError("Password is required");
-                    return;
-                }
-
                 if (TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is required");
+                    return;
+                }
+                if (TextUtils.isEmpty(password)) {
+                    mPassword.setError("Password is required");
                     return;
                 }
 
