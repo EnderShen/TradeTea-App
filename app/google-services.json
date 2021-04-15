@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "492986022123",
+    "project_id": "tradetea-3e81e",
+    "storage_bucket": "tradetea-3e81e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492986022123:android:5c037b601d877a50a726ae",
+        "android_client_info": {
+          "package_name": "com.example.tradetea"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "492986022123-4t4a5bfvij94n8m6870mspm6od55q2s0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOfw10IU3Xsrne3Xl7QTosDJjuPlJFfEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "492986022123-4t4a5bfvij94n8m6870mspm6od55q2s0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
