@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,7 +28,7 @@ public class RecyclerViewFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FirebaseFirestore db;
-    private RecyclerViewAdapter adapter;
+    private MyAdapter adapter;
     private List<RecyclerViewModel> list;
 
 
@@ -43,11 +44,10 @@ public class RecyclerViewFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<>();
-        adapter = new RecyclerViewAdapter(getActivity(),list);
+        adapter = new MyAdapter(getActivity(),list);
         recyclerView.setAdapter(adapter);
 
         ShowData();
-
         return view;
     }
 
@@ -57,20 +57,20 @@ public class RecyclerViewFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 list.clear();
                 for(DocumentSnapshot snapshot : task.getResult()){
-                    RecyclerViewModel model = new RecyclerViewModel(snapshot.getString("id"),snapshot.getString("title"),snapshot.getString("desc"));
+                    RecyclerViewModel model = new RecyclerViewModel(snapshot.getString("id"), snapshot.getString("title"), snapshot.getString("desc"));
                     list.add(model);
                 }
                 adapter.notifyDataSetChanged();
             }
-        }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Toast.makeText(getActivity(),"recieve Succsee",Toast.LENGTH_SHORT).show();
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                Toast.makeText(getActivity(), "recieve success", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(),"recieve faile",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "recieve Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
