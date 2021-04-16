@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@android:drawable/btn_star"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_list"
+        android:icon="@android:drawable/btn_dialog"
+        android:title="Comments" />
+
+    <item
+        android:id="@+id/nav_location"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="Location" />
+</menu>
