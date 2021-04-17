@@ -26,10 +26,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -46,6 +48,7 @@ public class Upload extends Fragment {
     private FirebaseFirestore db;
 
     private Uri imageUri;
+    private String URL;
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
@@ -63,10 +66,12 @@ public class Upload extends Fragment {
         image = view.findViewById(R.id.Upload_image);
 
         db = FirebaseFirestore.getInstance();
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
         image.setImageURI(imageUri);
 
 
-        uploadFile();
+
         ChooseImage();
         Publish();
 
@@ -104,49 +109,17 @@ public class Upload extends Fragment {
         publishBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String title = mtitle.getText().toString();
                 String desc = mdescribtion.getText().toString();
-                String uri = imageUri.toString();
                 String id = UUID.randomUUID().toString();
-
-                saveToFireStore(id,title,desc,uri);
+                uploadFile(id,title,desc);
                 mtitle.setText("");
                 mdescribtion.setText("");
             }
         });
     }
-
-    public void saveToFireStore(String id, String title, String desc,String imageUri)
-    {
-        if(!title.isEmpty() && !desc.isEmpty())
-        {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("id",id);
-            map.put("title",title);
-            map.put("desc",desc);
-            map.put("image",imageUri);
-
-            db.collection("data").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
-                        Toast.makeText(getActivity(),"Succsee",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(),"Failed",Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-        else
-        {
-            Toast.makeText(getActivity(),"Please Enter all information", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private  void uploadFile(){
+    private  void uploadFile(String id, String title, String desc){
 
         if(imageUri != null){
             StorageReference fileRef = mStorageRef.child(System.currentTimeMillis()+"."+"jpg");
@@ -156,20 +129,43 @@ public class Upload extends Fragment {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-
                             // get the image uri and pass the data from database.
                             final Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
+
                             firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    String downloadUri = uri.toString();
-                                    UploadModel UPLOAD = new UploadModel(downloadUri);
-                                    String uploadId = mDatabaseRef.push().getKey();
-                                    mDatabaseRef.child(uploadId).setValue(UPLOAD);
+                                    URL = uri.toString();
+                                    Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_SHORT).show();
+                                    if(!title.isEmpty() && !desc.isEmpty())
+                                    {
+                                        HashMap<String, Object> map = new HashMap<>();
+                                        map.put("id",id);
+                                        map.put("title",title);
+                                        map.put("desc",desc);
+                                        map.put("image",URL);
+
+                                        db.collection("data").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    Toast.makeText(getActivity(),"Succsee",Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getActivity(),"Failed",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(getActivity(),"Please Enter all information", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             });
 
-                            Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -190,4 +186,12 @@ public class Upload extends Fragment {
             Toast.makeText(getActivity(), "No image selected", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void saveToFireStore(String id, String title, String desc,String imageUri)
+    {
+
+
+    }
+
+
 }
