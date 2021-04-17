@@ -2,15 +2,17 @@ package com.example.tradetea;
 
 public class RecyclerViewModel {
     //Create the variables we want to operate
-    String id,title,desc;
+    String id,title,desc,imageuri;
 
     //empty constructor needed
     public RecyclerViewModel(){}
 
-    public RecyclerViewModel(String id,String title,String desc){
+    public RecyclerViewModel(String id,String title,String desc,String mImageUri){
         this.id = id;
         this.title = title;
         this.desc = desc;
+        this.imageuri = mImageUri;
+
     }
 
     public String getId() {
@@ -36,4 +38,8 @@ public class RecyclerViewModel {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+
+    public String getImageuri() { return imageuri; }
+
+    public void setImageuri(String imageuri) { this.imageuri = imageuri; }
 }

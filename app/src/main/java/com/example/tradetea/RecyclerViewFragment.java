@@ -57,7 +57,7 @@ public class RecyclerViewFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 list.clear();
                 for(DocumentSnapshot snapshot : task.getResult()){
-                    RecyclerViewModel model = new RecyclerViewModel(snapshot.getString("id"), snapshot.getString("title"), snapshot.getString("desc"));
+                    RecyclerViewModel model = new RecyclerViewModel(snapshot.getString("id"), snapshot.getString("title"), snapshot.getString("desc"),snapshot.getString("image"));
                     list.add(model);
                 }
                 adapter.notifyDataSetChanged();

@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.navigationBar);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Upload()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new RecyclerViewFragment()).commit();
     }
 
     // Navigation bar
@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new Upload();
                             break;
                         case R.id.nav_location:
-
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
