@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -17,10 +18,14 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +33,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -38,10 +44,9 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 
-
 public class Upload extends Fragment {
 
-    private EditText mtitle,mdescribtion ;
+    private EditText mtitle, mdescribtion;
     private static int RESULT_LOAD_IMAGE = 1;
     private Button publishBT;
     private ImageView image;
@@ -49,6 +54,7 @@ public class Upload extends Fragment {
 
     private Uri imageUri;
     private String URL;
+    private Spinner mUserSelectSpinner;
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
@@ -64,12 +70,16 @@ public class Upload extends Fragment {
         mdescribtion = view.findViewById(R.id.Edit_Describtion);
         publishBT = view.findViewById(R.id.button_upload);
         image = view.findViewById(R.id.Upload_image);
+        mUserSelectSpinner = view.findViewById(R.id.UserSelectSpinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.UploadSelection, R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        mUserSelectSpinner.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
         image.setImageURI(imageUri);
-
 
 
         ChooseImage();
@@ -78,18 +88,18 @@ public class Upload extends Fragment {
         return view;
     }
 
-    public void ChooseImage(){
+    public void ChooseImage() {
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-                    if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(getActivity(), "Permission denied", Toast.LENGTH_SHORT).show();
-                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                    }else{
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    } else {
                         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i,RESULT_LOAD_IMAGE);
+                        startActivityForResult(i, RESULT_LOAD_IMAGE);
                     }
                 }
             }
@@ -99,13 +109,13 @@ public class Upload extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == RESULT_LOAD_IMAGE){
+        if (resultCode == Activity.RESULT_OK && requestCode == RESULT_LOAD_IMAGE) {
             imageUri = data.getData();
             image.setImageURI(imageUri);
         }
     }
 
-    public void Publish(){
+    public void Publish() {
         publishBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,19 +123,20 @@ public class Upload extends Fragment {
                 String title = mtitle.getText().toString();
                 String desc = mdescribtion.getText().toString();
                 String id = UUID.randomUUID().toString();
-                uploadFile(id,title,desc);
+                uploadFile(id, title, desc);
                 mtitle.setText("");
                 mdescribtion.setText("");
             }
         });
     }
-    private  void uploadFile(String id, String title, String desc){
 
-        if(imageUri != null){
-            StorageReference fileRef = mStorageRef.child(System.currentTimeMillis()+"."+"jpg");
+    private void uploadFile(String id, String title, String desc) {
+
+        if (imageUri != null) {
+            StorageReference fileRef = mStorageRef.child(System.currentTimeMillis() + "." + "jpg");
 
             //if upload successful run this
-            mUploadTask=fileRef.putFile(imageUri)
+            mUploadTask = fileRef.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
@@ -137,31 +148,30 @@ public class Upload extends Fragment {
                                 public void onSuccess(Uri uri) {
                                     URL = uri.toString();
                                     Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_SHORT).show();
-                                    if(!title.isEmpty() && !desc.isEmpty())
-                                    {
-                                        HashMap<String, Object> map = new HashMap<>();
-                                        map.put("id",id);
-                                        map.put("title",title);
-                                        map.put("desc",desc);
-                                        map.put("image",URL);
+                                    if (mUserSelectSpinner.getSelectedItem().toString() == "Book") {
+                                        if (!title.isEmpty() && !desc.isEmpty()) {
+                                            HashMap<String, Object> map = new HashMap<>();
+                                            map.put("id", id);
+                                            map.put("title", title);
+                                            map.put("desc", desc);
+                                            map.put("image", URL);
 
-                                        db.collection("data").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful()){
-                                                    Toast.makeText(getActivity(),"Succsee",Toast.LENGTH_SHORT).show();
+                                            db.collection("book").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getActivity(), "Succsee", Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getActivity(),"Failed",Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(getActivity(),"Please Enter all information", Toast.LENGTH_SHORT).show();
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(getActivity(), "Please Enter all information", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
                             });
@@ -171,27 +181,19 @@ public class Upload extends Fragment {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "error"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "error" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                             //set value to progress bar
-                            double progress = (100.0* taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                         }
                     });
-        }else {
+        } else {
             //if image is not selected show this toast
             Toast.makeText(getActivity(), "No image selected", Toast.LENGTH_SHORT).show();
         }
     }
-
-    public void saveToFireStore(String id, String title, String desc,String imageUri)
-    {
-
-
-    }
-
-
 }

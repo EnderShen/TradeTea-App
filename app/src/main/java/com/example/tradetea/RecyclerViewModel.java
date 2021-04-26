@@ -4,7 +4,7 @@ public class RecyclerViewModel {
     //Create the variables we want to operate
     String id,title,desc,imageuri;
 
-    //empty constructor needed
+    //empty constructor
     public RecyclerViewModel(){}
 
     public RecyclerViewModel(String id,String title,String desc,String mImageUri){
