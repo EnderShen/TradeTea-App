@@ -134,28 +134,27 @@ public class Upload extends Fragment {
 
         if (imageUri != null) {
             StorageReference fileRef = mStorageRef.child(System.currentTimeMillis() + "." + "jpg");
-
-            //if upload successful run this
             mUploadTask = fileRef.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-                            // get the image uri and pass the data from database.
+                            // get the image uri and pass the url from database.
                             final Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
 
                             firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     URL = uri.toString();
-                                    Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_SHORT).show();
-                                    if (mUserSelectSpinner.getSelectedItem().toString() == "Book") {
-                                        if (!title.isEmpty() && !desc.isEmpty()) {
-                                            HashMap<String, Object> map = new HashMap<>();
-                                            map.put("id", id);
-                                            map.put("title", title);
-                                            map.put("desc", desc);
-                                            map.put("image", URL);
+                                    String message = mUserSelectSpinner.getSelectedItem().toString();
 
+                                    if (!title.isEmpty() && !desc.isEmpty()) {
+                                        HashMap<String, Object> map = new HashMap<>();
+                                        map.put("id", id);
+                                        map.put("title", title);
+                                        map.put("desc", desc);
+                                        map.put("image", URL);
+
+                                        if (message.contains("Book")) {
                                             db.collection("book").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
@@ -169,9 +168,25 @@ public class Upload extends Fragment {
                                                     Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
-                                        } else {
-                                            Toast.makeText(getActivity(), "Please Enter all information", Toast.LENGTH_SHORT).show();
                                         }
+                                        if (message.contains("Devices")) {
+                                            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                                            db.collection("other").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getActivity(), "Succsee", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        Toast.makeText(getActivity(), "Please Enter all information", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -182,13 +197,6 @@ public class Upload extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(getActivity(), "error" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                            //set value to progress bar
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                         }
                     });
         } else {
