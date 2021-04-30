@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,12 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecyclerViewFragment extends Fragment {
+public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemListener {
 
     private RecyclerView recyclerView;
     private FirebaseFirestore db;
     private MyAdapter adapter;
     private List<RecyclerViewModel> list;
+
 
 
     @Override
@@ -44,15 +46,16 @@ public class RecyclerViewFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<>();
-        adapter = new MyAdapter(getActivity(),list);
+        adapter = new MyAdapter(getActivity(),list,this);
         recyclerView.setAdapter(adapter);
 
         ShowData();
         return view;
     }
 
+
     private void ShowData(){
-        db.collection("data").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Book").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 list.clear();
@@ -65,14 +68,19 @@ public class RecyclerViewFragment extends Fragment {
         }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                Toast.makeText(getActivity(), "recieve success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Load success", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "recieve Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Load Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    @Override
+    public void onItemClick(int position) {
+        adapter.getItemId(position);
+        Toast.makeText(getActivity(), "11", Toast.LENGTH_SHORT).show();
+    }
 }

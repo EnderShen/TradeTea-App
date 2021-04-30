@@ -145,7 +145,7 @@ public class Upload extends Fragment {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     URL = uri.toString();
-                                    String message = mUserSelectSpinner.getSelectedItem().toString();
+                                    String category = mUserSelectSpinner.getSelectedItem().toString();
 
                                     if (!title.isEmpty() && !desc.isEmpty()) {
                                         HashMap<String, Object> map = new HashMap<>();
@@ -154,39 +154,19 @@ public class Upload extends Fragment {
                                         map.put("desc", desc);
                                         map.put("image", URL);
 
-                                        if (message.contains("Book")) {
-                                            db.collection("book").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Toast.makeText(getActivity(), "Succsee", Toast.LENGTH_SHORT).show();
-                                                    }
+                                        db.collection(category).document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getActivity(), "Succsee", Toast.LENGTH_SHORT).show();
                                                 }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                        if (message.contains("Devices")) {
-                                            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                                            db.collection("other").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Toast.makeText(getActivity(), "Succsee", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        Toast.makeText(getActivity(), "Please Enter all information", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
                                 }
                             });

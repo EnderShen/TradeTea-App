@@ -17,18 +17,25 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private Context mcontext;
     private List<RecyclerViewModel> mList;
+    private OnItemListener monItemListener;
 
-    public MyAdapter(Context context, List<RecyclerViewModel> list)
+    public MyAdapter(Context context, List<RecyclerViewModel> list, OnItemListener onItemListener)
     {
         mcontext = context;
         mList = list;
+
+        this.monItemListener = onItemListener;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(mcontext).inflate(R.layout.recyclerviewitems,parent,false);
-        return new MyViewHolder(v);
+        return new MyViewHolder(v,monItemListener);
+    }
+
+    public interface  OnItemListener{
+        void onItemClick(int position);
     }
 
     @Override
@@ -46,17 +53,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return mList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView titel,desc;
         ImageView image;
-        public MyViewHolder(@NonNull View itemView) {
+        OnItemListener onItemListener;
+
+        public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
 
             titel = itemView.findViewById(R.id.rTitle);
             desc = itemView.findViewById(R.id.rDescribtion);
             image = itemView.findViewById(R.id.rIamge);
 
+            this.onItemListener = onItemListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onItemListener.onItemClick(getAdapterPosition());
         }
     }
 }
