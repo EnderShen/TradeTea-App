@@ -12,7 +12,6 @@ public class UploadModel {
 
     //a normal constructor
     public UploadModel(String mImageUri) {
-
         this.mImageUri = mImageUri;
     }
 

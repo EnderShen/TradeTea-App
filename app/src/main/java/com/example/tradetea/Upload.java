@@ -46,7 +46,7 @@ import com.google.firebase.storage.UploadTask;
 
 public class Upload extends Fragment {
 
-    private EditText mtitle, mdescribtion;
+    private EditText mtitle, mdescribtion,mPhone;
     private static int RESULT_LOAD_IMAGE = 1;
     private Button publishBT;
     private ImageView image;
@@ -70,6 +70,7 @@ public class Upload extends Fragment {
         mdescribtion = view.findViewById(R.id.Edit_Describtion);
         publishBT = view.findViewById(R.id.button_upload);
         image = view.findViewById(R.id.Upload_image);
+        mPhone = view.findViewById(R.id.Upload_phone);
         mUserSelectSpinner = view.findViewById(R.id.UserSelectSpinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.UploadSelection, R.layout.support_simple_spinner_dropdown_item);
@@ -122,15 +123,16 @@ public class Upload extends Fragment {
 
                 String title = mtitle.getText().toString();
                 String desc = mdescribtion.getText().toString();
+                String phone = mPhone.getText().toString();
                 String id = UUID.randomUUID().toString();
-                uploadFile(id, title, desc);
+                uploadFile(id, title, desc,phone);
                 mtitle.setText("");
                 mdescribtion.setText("");
             }
         });
     }
 
-    private void uploadFile(String id, String title, String desc) {
+    private void uploadFile(String id, String title, String desc,String phone) {
 
         if (imageUri != null) {
             StorageReference fileRef = mStorageRef.child(System.currentTimeMillis() + "." + "jpg");
@@ -147,11 +149,12 @@ public class Upload extends Fragment {
                                     URL = uri.toString();
                                     String category = mUserSelectSpinner.getSelectedItem().toString();
 
-                                    if (!title.isEmpty() && !desc.isEmpty()) {
+                                    if (!title.isEmpty() && !desc.isEmpty() && !phone.isEmpty() && !imageUri.equals("")) {
                                         HashMap<String, Object> map = new HashMap<>();
                                         map.put("id", id);
                                         map.put("title", title);
                                         map.put("desc", desc);
+                                        map.put("phone",phone);
                                         map.put("image", URL);
 
                                         db.collection(category).document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -170,7 +173,6 @@ public class Upload extends Fragment {
                                     }
                                 }
                             });
-
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

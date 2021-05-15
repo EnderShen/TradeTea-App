@@ -2,7 +2,7 @@ package com.example.tradetea;
 
 public class RecyclerViewModel {
     //Create the variables we want to operate
-    String id,title,desc,imageuri;
+    String id,title,desc,imageuri,Contactnumber;
 
     //empty constructor
     public RecyclerViewModel(){}
@@ -12,7 +12,22 @@ public class RecyclerViewModel {
         this.title = title;
         this.desc = desc;
         this.imageuri = mImageUri;
+    }
 
+    public RecyclerViewModel(String id,String title,String desc,String mImageUri,String contactNumber){
+        this.id = id;
+        this.title = title;
+        this.desc = desc;
+        this.imageuri = mImageUri;
+        this.Contactnumber = contactNumber;
+    }
+
+    public String getContactnumber() {
+        return Contactnumber;
+    }
+
+    public void setContactnumber(String contactnumber) {
+        Contactnumber = contactnumber;
     }
 
     public String getId() {

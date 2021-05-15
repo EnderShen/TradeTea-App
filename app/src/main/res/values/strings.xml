@@ -3,7 +3,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="UploadSelection">
-        <item>Book</item>
+        <item>IT</item>
+        <item>Buisness</item>
+        <item>Art</item>
+        <item>Education</item>
+        <item>Health</item>
+        <item>Science</item>
         <item>Other Devices</item>
     </string-array>
 </resources>

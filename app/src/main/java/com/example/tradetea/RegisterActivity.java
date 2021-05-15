@@ -23,8 +23,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView RBackIcon;
     private FirebaseAuth fAuth;
     private EditText REmail;
-    private  EditText RPassword;
-    private  Button RegisterBT;
+    private EditText RPassword;
+    private Button RegisterBT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +40,11 @@ public class RegisterActivity extends AppCompatActivity {
         RegisterBT = findViewById(R.id.RRegisterBT);
         fAuth = FirebaseAuth.getInstance();
 
-        Register(REmail,RPassword,RegisterBT);
+        Register(REmail, RPassword, RegisterBT);
         BackToLogin(RBackIcon);
     }
 
-    private void Register(EditText Email, EditText Password, Button RegisterBT)
-    {
+    private void Register(EditText Email, EditText Password, Button RegisterBT) {
         RegisterBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,9 +66,6 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                //Crate a account with email and password
-                //if registered successful, user will turn to home page
-                //if fail to registered, display error message
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -87,12 +83,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void BackToLogin(ImageView mBackIcon)
-    {
+    private void BackToLogin(ImageView mBackIcon) {
         mBackIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
     }

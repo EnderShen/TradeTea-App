@@ -12,17 +12,17 @@
 
         <ImageView
             android:id="@+id/Upload_image"
-            android:layout_width="177dp"
-            android:layout_height="194dp"
+            android:layout_width="135dp"
+            android:layout_height="107dp"
+            android:adjustViewBounds="true"
+            android:background="@color/cardview_dark_background"
             android:clickable="true"
-            android:src="@color/design_default_color_background"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/WriteTitle"
-            app:layout_constraintVertical_bias="0.152" />
+            app:layout_constraintVertical_bias="0.096" />
 
         <EditText
             android:id="@+id/WriteTitle"
@@ -45,7 +45,7 @@
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Upload_image"
-            app:layout_constraintVertical_bias="0.296" />
+            app:layout_constraintVertical_bias="0.174" />
 
         <Button
             android:id="@+id/button_upload"
@@ -54,21 +54,35 @@
             android:text="Publish"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.442"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Edit_Describtion"
-            app:layout_constraintVertical_bias="0.773" />
+            app:layout_constraintVertical_bias="0.761" />
 
         <Spinner
             android:id="@+id/UserSelectSpinner"
             android:layout_width="150dp"
             android:layout_height="28dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/Upload_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.904"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/WriteTitle"
             app:layout_constraintVertical_bias="0.547" />
+
+        <EditText
+            android:id="@+id/Upload_phone"
+            android:layout_width="139dp"
+            android:layout_height="42dp"
+            android:ems="10"
+            android:hint="Contact number"
+            android:inputType="phone"
+            app:layout_constraintBottom_toTopOf="@+id/button_upload"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.834"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Edit_Describtion"
+            app:layout_constraintVertical_bias="0.508" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
