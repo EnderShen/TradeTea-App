@@ -6,7 +6,7 @@ public class UploadModel {
     private String mImageUri;
 
     //empty constructor neeeded
-    public UploadModel(){
+    public UploadModel() {
 
     }
 

@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mRegister;
     private FirebaseAuth fAuth;
     private EditText mEmail, mPassword;
-    private  Button mLoginBT;
+    private Button mLoginBT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +39,16 @@ public class LoginActivity extends AppCompatActivity {
         mLoginBT = findViewById(R.id.LoginBT);
 
         //if user already logged in, user will not ask for log again
-        if(fAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        if (fAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
 
         GotoRegister(mRegister);
-        Login(mEmail,mPassword,mLoginBT);
+        Login(mEmail, mPassword, mLoginBT);
     }
 
-    private void Login(EditText mEmail, EditText mPassword,Button mLoginBt)
-    {
+    private void Login(EditText mEmail, EditText mPassword, Button mLoginBt) {
         mLoginBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,12 +94,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void GotoRegister(TextView mRegister)
-    {
+    private void GotoRegister(TextView mRegister) {
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),RegisterActivity.class));
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
     }

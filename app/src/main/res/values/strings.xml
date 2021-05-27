@@ -4,7 +4,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="UploadSelection">
         <item>IT</item>
-        <item>Buisness</item>
+        <item>Business</item>
+        <item>Art</item>
+        <item>Education</item>
+        <item>Health</item>
+        <item>Science</item>
+        <item>Other Devices</item>
+    </string-array>
+
+    <string-array name="Selections">
+        <item>IT</item>
+        <item>Business</item>
         <item>Art</item>
         <item>Education</item>
         <item>Health</item>

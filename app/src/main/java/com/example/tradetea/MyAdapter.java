@@ -19,8 +19,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<RecyclerViewModel> mList;
     private OnItemListener monItemListener;
 
-    public MyAdapter(Context context, List<RecyclerViewModel> list, OnItemListener onItemListener)
-    {
+    public MyAdapter(Context context, List<RecyclerViewModel> list, OnItemListener onItemListener) {
         mcontext = context;
         mList = list;
 
@@ -30,11 +29,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(mcontext).inflate(R.layout.recyclerviewitems,parent,false);
-        return new MyViewHolder(v,monItemListener);
+        View v = LayoutInflater.from(mcontext).inflate(R.layout.recyclerviewitems, parent, false);
+        return new MyViewHolder(v, monItemListener);
     }
 
-    public interface  OnItemListener{
+    public interface OnItemListener {
         void onItemClick(int position);
     }
 
@@ -55,7 +54,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView titel,desc;
+        TextView titel, desc;
         ImageView image;
         OnItemListener onItemListener;
 

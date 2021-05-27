@@ -14,7 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,32 +41,75 @@ import java.util.List;
 public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemListener {
 
     private RecyclerView recyclerView;
+    private Button SearchBT;
+    private EditText Keyword;
+    private Spinner mSelectSpinner;
     private FirebaseFirestore db;
     private MyAdapter adapter;
-    private FirebaseRecyclerAdapter<RecyclerViewModel, MyAdapter.MyViewHolder> mFireBaseRecyclerAdapter;
     private List<RecyclerViewModel> list;
+    private List<RecyclerViewModel> ResultList;
+    private MyAdapter ResultAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
         recyclerView = view.findViewById(R.id.DisplayRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        mSelectSpinner = view.findViewById(R.id.SelectCategory);
+        SearchBT = view.findViewById(R.id.SearchBT);
+        Keyword = view.findViewById(R.id.SearchItems);
+
+        ArrayAdapter<CharSequence> Spinneradapter = ArrayAdapter.createFromResource(getActivity(), R.array.Selections, R.layout.support_simple_spinner_dropdown_item);
+        Spinneradapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        mSelectSpinner.setAdapter(Spinneradapter);
+
         list = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
         adapter = new MyAdapter(getActivity(), list, this);
         recyclerView.setAdapter(adapter);
 
-        ShowData();
+        ResultList = new ArrayList<>();
+        ResultAdapter = new MyAdapter(getActivity(), ResultList, this);
+
+
+        ChangeCategory();
+        SearchProducts();
         return view;
     }
 
-    private void ShowData() {
-        db.collection("IT").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    private void SearchProducts() {
+
+        SearchBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (Keyword != null) {
+                    String keyword = Keyword.getText().toString();
+
+                    for (int i = 0; i < list.size(); i++) {
+
+                        if (list.get(i).getTitle().contains(keyword)) {
+                            ResultList.add(list.get(i));
+                        }
+                    }
+
+                    ResultAdapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(ResultAdapter);
+
+                } else {
+                    Toast.makeText(getActivity(), "Please, Enter your keyword", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void ShowData(String collaction) {
+        db.collection(collaction).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 list.clear();
@@ -86,6 +134,24 @@ public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemLi
             public void onFailure(@NonNull Exception e) {
                 if (getContext() != null)
                     Toast.makeText(getContext(), "Load Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void ChangeCategory() {
+        mSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                list.clear();
+                adapter.notifyDataSetChanged();
+                String category = mSelectSpinner.getSelectedItem().toString();
+                Toast.makeText(getContext(), category, Toast.LENGTH_SHORT).show();
+                ShowData(category);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

@@ -6,10 +6,40 @@
     tools:context=".RecyclerViewFragment"
     android:background="@color/white">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/SelectCategory"
+            android:layout_width="100dp"
+            android:layout_height="40dp" />
+
+        <EditText
+            android:id="@+id/SearchItems"
+            android:layout_width="168dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/SearchBT"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:text="Search" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/DisplayRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    android:id="@+id/DisplayRecyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+
+</LinearLayout>
 
 </FrameLayout>

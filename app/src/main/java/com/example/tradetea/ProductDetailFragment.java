@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 public class ProductDetailFragment extends Fragment {
 
-    TextView describtion,title,Phone,imageurl;
+    TextView describtion, title, Phone;
     ImageView imageView;
 
 
@@ -29,13 +30,20 @@ public class ProductDetailFragment extends Fragment {
         Phone = v.findViewById(R.id.dPhone);
         imageView = v.findViewById(R.id.dImageView);
 
-        String imageurl;
+
+        String imageURL;
         title.setText(getArguments().getString("title"));
         describtion.setText(getArguments().getString("Des"));
         Phone.setText(getArguments().getString("phone"));
-        imageurl = getArguments().getString("ImageURL");
+        imageURL = getArguments().getString("ImageURL");
         //use picasso to load the image and display it
-        Picasso.get().load(imageurl).into(imageView);
+        Picasso.get().load(imageURL).into(imageView);
         return v;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

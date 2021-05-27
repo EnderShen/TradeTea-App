@@ -9,7 +9,8 @@ import android.view.WindowManager;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private  int Sleep_time = 1;
+    private int Sleep_time = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,20 +20,20 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         //hide progress bar
         getSupportActionBar().hide();
-        
+
         //Create a new logo launcher object and start it.
         LogoLauncher logoLauncher = new LogoLauncher();
         logoLauncher.start();
     }
 
-    private class LogoLauncher extends Thread{
-        public void run(){
+    private class LogoLauncher extends Thread {
+        public void run() {
             try {
-                sleep(1000*Sleep_time);
-            }catch (InterruptedException e){
+                sleep(1000 * Sleep_time);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Intent intent = new Intent(SplashScreenActivity.this,LoginActivity.class);
+            Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
             startActivity(intent);
             SplashScreenActivity.this.finish();
         }
