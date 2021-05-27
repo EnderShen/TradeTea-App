@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new Upload();
                             break;
                         case R.id.nav_location:
+                            selectedFragment = new MapFragment();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
