@@ -31,9 +31,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //hide progress bar
-        getSupportActionBar().hide();
-
         RBackIcon = findViewById(R.id.mBackIcon);
         REmail = findViewById(R.id.REmail);
         RPassword = findViewById(R.id.RPassword);
@@ -90,5 +87,15 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

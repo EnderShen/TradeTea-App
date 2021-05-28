@@ -1,16 +1,14 @@
 package com.example.tradetea;
 
-import android.media.Image;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,7 +26,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +40,9 @@ public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemLi
     private FirebaseFirestore db;
     private MyAdapter adapter;
     private List<RecyclerViewModel> list;
-    private List<RecyclerViewModel> ResultList;
-    private MyAdapter ResultAdapter;
+    private List<RecyclerViewModel> FilterResultList;
+    private MyAdapter FilterResultAdapter;
+    private MediaPlayer mediaPlayer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,9 +50,13 @@ public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemLi
 
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
+        db = FirebaseFirestore.getInstance();
+
         recyclerView = view.findViewById(R.id.DisplayRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mediaPlayer = MediaPlayer.create(getActivity(),R.raw.buttonsound);
 
         mSelectSpinner = view.findViewById(R.id.SelectCategory);
         SearchBT = view.findViewById(R.id.SearchBT);
@@ -69,37 +67,37 @@ public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemLi
         mSelectSpinner.setAdapter(Spinneradapter);
 
         list = new ArrayList<>();
-        db = FirebaseFirestore.getInstance();
         adapter = new MyAdapter(getActivity(), list, this);
         recyclerView.setAdapter(adapter);
 
-        ResultList = new ArrayList<>();
-        ResultAdapter = new MyAdapter(getActivity(), ResultList, this);
-
+        FilterResultList = new ArrayList<>();
+        FilterResultAdapter = new MyAdapter(getActivity(), FilterResultList, this);
 
         ChangeCategory();
         SearchProducts();
         return view;
     }
 
+    //Search specific items from recycler view by entering keywords
     private void SearchProducts() {
 
         SearchBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (Keyword != null) {
+                mediaPlayer.start();
+                if (Keyword.getText().length() != 0) {
                     String keyword = Keyword.getText().toString();
 
                     for (int i = 0; i < list.size(); i++) {
 
                         if (list.get(i).getTitle().contains(keyword)) {
-                            ResultList.add(list.get(i));
+                            FilterResultList.add(list.get(i));
                         }
                     }
 
-                    ResultAdapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(ResultAdapter);
+                    FilterResultAdapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(FilterResultAdapter);
 
                 } else {
                     Toast.makeText(getActivity(), "Please, Enter your keyword", Toast.LENGTH_SHORT).show();
@@ -108,8 +106,9 @@ public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemLi
         });
     }
 
-    private void ShowData(String collaction) {
-        db.collection(collaction).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    // When this function called, store data into recycler view
+    private void ShowData(String path) {
+        db.collection(path).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 list.clear();
@@ -138,6 +137,7 @@ public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemLi
         });
     }
 
+    // When spinner item selected, reload the recycler view
     public void ChangeCategory() {
         mSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -156,7 +156,7 @@ public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemLi
         });
     }
 
-
+    //If recycler view item clicked, using bundle to pass the information to another fragment
     @Override
     public void onItemClick(int position) {
 
@@ -172,5 +172,15 @@ public class RecyclerViewFragment extends Fragment implements MyAdapter.OnItemLi
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, productDetailFragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

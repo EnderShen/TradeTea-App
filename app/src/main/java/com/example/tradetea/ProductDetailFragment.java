@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,8 +14,8 @@ import com.squareup.picasso.Picasso;
 
 public class ProductDetailFragment extends Fragment {
 
-    TextView describtion, title, Phone;
-    ImageView imageView;
+    TextView description, title, Phone;
+    ImageView ItemImage;
 
 
     @Override
@@ -25,19 +24,20 @@ public class ProductDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_product_detail, container, false);
 
-        describtion = v.findViewById(R.id.dDetail);
+        description = v.findViewById(R.id.dDetail);
         title = v.findViewById(R.id.dTitle);
         Phone = v.findViewById(R.id.dPhone);
-        imageView = v.findViewById(R.id.dImageView);
+        ItemImage = v.findViewById(R.id.dImageView);
 
 
         String imageURL;
         title.setText(getArguments().getString("title"));
-        describtion.setText(getArguments().getString("Des"));
+        description.setText(getArguments().getString("Des"));
         Phone.setText(getArguments().getString("phone"));
         imageURL = getArguments().getString("ImageURL");
+
         //use picasso to load the image and display it
-        Picasso.get().load(imageURL).into(imageView);
+        Picasso.get().load(imageURL).into(ItemImage);
         return v;
     }
 

@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance();
 
-        mRegister = findViewById(R.id.mRegister);
+        mRegister = findViewById(R.id.Register);
         mEmail = findViewById(R.id.LoginEmail);
         mPassword = findViewById(R.id.LoginPassword);
         mLoginBT = findViewById(R.id.LoginBT);
@@ -48,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         Login(mEmail, mPassword, mLoginBT);
     }
 
+    //When login button clicked, Validate user input first
+    //if username and passwords correct, switch to home page
     private void Login(EditText mEmail, EditText mPassword, Button mLoginBt) {
         mLoginBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //Go to register fragment, if user click the textView
     private void GotoRegister(TextView mRegister) {
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,5 +104,14 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

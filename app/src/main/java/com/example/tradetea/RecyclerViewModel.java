@@ -8,13 +8,6 @@ public class RecyclerViewModel {
     public RecyclerViewModel() {
     }
 
-    public RecyclerViewModel(String id, String title, String desc, String mImageUri) {
-        this.id = id;
-        this.title = title;
-        this.desc = desc;
-        this.imageuri = mImageUri;
-    }
-
     public RecyclerViewModel(String id, String title, String desc, String mImageUri, String contactNumber) {
         this.id = id;
         this.title = title;

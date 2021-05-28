@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,7 @@ public class Upload extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
 
+        final MediaPlayer mediaPlayer = MediaPlayer.create(getActivity(),R.raw.buttonsound);
         mtitle = view.findViewById(R.id.WriteTitle);
         mdescribtion = view.findViewById(R.id.Edit_Describtion);
         publishBT = view.findViewById(R.id.button_upload);
@@ -84,11 +87,12 @@ public class Upload extends Fragment {
 
 
         ChooseImage();
-        Publish();
+        Publish(mediaPlayer);
 
         return view;
     }
 
+    // allow user to choose a image from their phone
     public void ChooseImage() {
 
         image.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +111,7 @@ public class Upload extends Fragment {
         });
     }
 
+    //If user select a image from their phone, display it in imageview for user review.
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -116,11 +121,12 @@ public class Upload extends Fragment {
         }
     }
 
-    public void Publish() {
+    public void Publish(MediaPlayer mediaPlayer) {
         publishBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                mediaPlayer.start();
                 String title = mtitle.getText().toString();
                 String desc = mdescribtion.getText().toString();
                 String phone = mPhone.getText().toString();
@@ -132,6 +138,9 @@ public class Upload extends Fragment {
         });
     }
 
+    // upload image to storage and get the image URL
+    //upload text to Firestore database
+    //if successfully upload, display a success message
     private void uploadFile(String id, String title, String desc,String phone) {
 
         if (imageUri != null) {
@@ -170,6 +179,10 @@ public class Upload extends Fragment {
                                                 Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                                             }
                                         });
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(getActivity(), "Please, enter all the information", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });

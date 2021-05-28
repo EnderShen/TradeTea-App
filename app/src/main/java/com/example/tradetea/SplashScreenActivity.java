@@ -18,18 +18,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
 
-        //hide progress bar
-        getSupportActionBar().hide();
-
         //Create a new logo launcher object and start it.
         LogoLauncher logoLauncher = new LogoLauncher();
         logoLauncher.start();
     }
 
+    //display splash screen for 2 second
     private class LogoLauncher extends Thread {
         public void run() {
             try {
-                sleep(1000 * Sleep_time);
+                sleep(2000 * Sleep_time);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

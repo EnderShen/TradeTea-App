@@ -19,6 +19,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<RecyclerViewModel> mList;
     private OnItemListener monItemListener;
 
+    // My adapter constructor
     public MyAdapter(Context context, List<RecyclerViewModel> list, OnItemListener onItemListener) {
         mcontext = context;
         mList = list;
@@ -32,36 +33,39 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         View v = LayoutInflater.from(mcontext).inflate(R.layout.recyclerviewitems, parent, false);
         return new MyViewHolder(v, monItemListener);
     }
-
-    public interface OnItemListener {
-        void onItemClick(int position);
-    }
-
+    
+    //For loading information to each recycler view position
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         RecyclerViewModel recyclerViewModel = mList.get(position);
-        holder.titel.setText(mList.get(position).getTitle());
+        holder.title.setText(mList.get(position).getTitle());
         holder.desc.setText(mList.get(position).getDesc());
         String imageuri = recyclerViewModel.getImageuri();
         Picasso.get().load(imageuri).into(holder.image);
     }
 
+    // count recycler view items
     @Override
     public int getItemCount() {
         return mList.size();
     }
 
+    public interface OnItemListener {
+        void onItemClick(int position);
+    }
+
+    // get reference for each view
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView titel, desc;
+        TextView title, desc;
         ImageView image;
         OnItemListener onItemListener;
 
         public MyViewHolder(@NonNull View itemView, OnItemListener onItemListener) {
             super(itemView);
 
-            titel = itemView.findViewById(R.id.rTitle);
+            title = itemView.findViewById(R.id.rTitle);
             desc = itemView.findViewById(R.id.rDescribtion);
             image = itemView.findViewById(R.id.rIamge);
 

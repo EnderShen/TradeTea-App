@@ -5,8 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="390dp"
+        android:layout_width="match_parent"
         android:layout_height="121dp"
         android:orientation="horizontal">
 
@@ -15,13 +16,13 @@
             android:id="@+id/rIamge"
             android:layout_width="124dp"
             android:layout_height="92dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@color/design_default_color_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.06"
             app:layout_constraintStart_toStartOf="parent"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
-            android:src="@color/design_default_color_background"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.448" />
 
